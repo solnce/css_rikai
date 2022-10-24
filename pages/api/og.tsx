@@ -1,11 +1,16 @@
 import React from 'react';
+import type { NextRequest } from 'next/server';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { ImageResponse } from '@vercel/og';
 
 export const config = {
   runtime: 'experimental-edge',
 };
 
-export default function handler() {
+export default (req: NextRequest) => {
+  const { searchParams } = new URL(req.url);
+  const text = searchParams.get('text');
+
   return new ImageResponse(
     (
       <div
@@ -31,10 +36,10 @@ export default function handler() {
             transform: 'translateX(250px)',
           }}
         >
-          <span>CSS</span>
+          <span>{text || 'CSS'}</span>
           <span>完全に理解した</span>
         </div>
       </div>
     )
   );
-}
+};
